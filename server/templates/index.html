@@ -1,0 +1,42 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/styling.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+        {{%if table_list%}}
+        <div class="table-responsive">
+            <table class = "table">
+                <thead>
+                    <tr>
+                        <th>Agent Name</th>
+                    </tr>
+                </thead>
+                <tbody id="ServerList">
+                    {%for x in table_list%}
+                    <td><a href="/{{x}}">{{x}}</a></td>
+                    {%endfor%}
+                </tbody>
+            </table> 
+            <div class="modal fade" id="loading" data-backdrop="false">
+                <div class="modal-dialog modal-sm">
+                    <div class="modal-content">
+                        <div class="modal-body text-center">
+                            <div class="loader"></div>
+                            <div class="loader-txt">
+                                <p>Retriving Server Information...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>             
+        </div>
+        {{%else%}}
+        <h1>No agents found. Please setup an agent to talk to this server</h1>
+        {{%endif%}}
+    </body>
+</html>
