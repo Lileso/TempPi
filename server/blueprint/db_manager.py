@@ -9,7 +9,8 @@ import datetime
 import pathlib
 
 p = pathlib.Path('config/server.yaml')
-config = yaml.safe_load(p.open())
+with p.open(mode='r') as f:
+    config = yaml.safe_load(f)
 db_config = config['database']
 class database:
     def __init__(self):

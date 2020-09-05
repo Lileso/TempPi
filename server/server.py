@@ -7,7 +7,8 @@ import yaml
 db = database()
 
 p = pathlib.Path('config/server.yaml')
-config = yaml.safe_load(p.open())
+with p.open(mode='r') as f:
+    config = yaml.safe_load(f)
 api_config = config['webserver']
 
 app = Flask(__name__)

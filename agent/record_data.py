@@ -6,7 +6,8 @@ import yaml
 import pathlib
 import requests
 p = pathlib.Path('config/agent.yaml')
-config = yaml.safe_load(p.open())
+with p.open(mode='r') as f:
+    config = yaml.safe_load(f)
 agent_config = config['agent']
 server_config = config['agent']
 
