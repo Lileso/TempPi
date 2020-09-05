@@ -1,4 +1,0 @@
-Flask 
-SQLAlchemy
-flask-sqlalchemy
-Adafruit_DHT
