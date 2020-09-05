@@ -1,5 +1,5 @@
 from flask import Flask, render_template,jsonify, Blueprint
-from blueprint import api
+from blueprint.api import api
 from blueprint.db_manager import database
 import pathlib
 import yaml
@@ -8,10 +8,11 @@ db = database()
 
 p = pathlib.Path('config/server.yaml')
 config = yaml.safe_load(p.open())
-api_config = config['api']
+api_config = config['webserver']
 
 app = Flask(__name__)
 app.register_blueprint(api)
+
 @app.route('/')
 def index():
     return render_template('index.html', table_list=db.table_list())
