@@ -5,7 +5,6 @@ from sqlalchemy import Column
 from sqlalchemy import Integer
 from sqlalchemy import Date
 import yaml
-import os
 import datetime
 import pathlib
 
@@ -14,8 +13,7 @@ config = yaml.safe_load(p.open())
 db_config = config['database']
 class database:
     def __init__(self):
-        script_path = os.path.dirname(os.path.abspath(__file__))
-        self.engine = create_engine('sqlite:///'+script_path+'/dht_database.db')
+        self.engine = create_engine(db_config['database_path'])
         self.metadata = MetaData(bind=self.engine)
         self.metadata.create_all()
         self.metadata.reflect(bind=self.engine)
@@ -53,7 +51,9 @@ class database:
         agent_table = self.metadata.tables.get(agent_name)
         if agent_table is not None:
             agent_table.drop(self.engine)
-
+    
+    def table_list(self):
+        return self.metadata.tables.keys()
 if __name__ == "__main__":
     db=database()
     db.add_record(agent_name="Test_agent", humidity=1, temperature=2, date_time=datetime.datetime.now())

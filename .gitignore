@@ -132,5 +132,5 @@ dmypy.json
 
 ## Custom Gitignore
 .vscode
-server/dht_database.db
+dht_database.db
 

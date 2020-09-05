@@ -1,21 +1,24 @@
 from flask import Flask, render_template,jsonify, Blueprint
 from blueprint import api
+from blueprint.db_manager import database
+import pathlib
+import yaml
 
-def add_parser_options(parser):
-    parser.add_option('--port', dest="port", action="store", type="int", default=80, help="port [default: %default]")
-    parser.add_option('--host', dest="host", action="store", type="str", default='0.0.0.0', help="host [default: %default]")
-    parser.add_option('-n', action="store", type="int", default=100, help="max limit of rows avilable by /data/ [default: %default]")
-    return parser
+db = database()
+
+p = pathlib.Path('config/server.yaml')
+config = yaml.safe_load(p.open())
+api_config = config['api']
 
 app = Flask(__name__)
 app.register_blueprint(api)
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', table_list=db.table_list())
 
 @app.route('/<agent_name>')
 def graph(agent_name):
     return render_template('graph.html', agent_name=agent_name)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug=True) 
+    app.run(host=api_config['host'], port=api_config['port'], debug=api_config['debug']) 

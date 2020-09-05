@@ -1,5 +1,7 @@
 webserver:
   host:  0.0.0.0
   port: 80
+  debug: False
 database:
   record_limit: 100
+  database_path: 'sqlite:///./dht_database.db'
