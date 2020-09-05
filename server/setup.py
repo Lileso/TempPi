@@ -22,7 +22,7 @@ def build_service():
     cwd = pathlib.Path.cwd()
     user= getpass.getuser()
     with p.open(mode="w") as f:
-        f.write(f"'[Unit] \nDescription=TempPi Webserver\nAfter=network.target\n\n[Service]\nType=simple\nUser={user}\nWorkingDirectory=%s\nExecStart={sys.executable} {cwd}/server.py \nRestart=on-failure \n[Install]\nWantedBy=multi-user.target'")
+        f.write(f"[Unit] \nDescription=TempPi Webserver\nAfter=network.target\n\n[Service]\nType=simple\nUser={user}\nWorkingDirectory=%s\nExecStart={sys.executable} {cwd}/server.py \nRestart=on-failure \n[Install]\nWantedBy=multi-user.target")
     print("Created a service file in current directory. Please copy this to /etc/systemd/system/")
 
 print("Setting Up TempPi's Webserver")

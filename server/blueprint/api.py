@@ -28,10 +28,10 @@ def send_data(agent_name):
     sent_json = request.get_json()
     if "temperature" not in sent_json or "humidity" not in sent_json or "date_time" not in sent_json:
         return jsonify({"exception_code": 422, "exception_message": "Data missing from sent json. Data must include: temperature, humidity, data_time", "success": False}), 422
-    db.add_record(agent_name=agent_name, humidity=sent_json['humidity'], temperature=sent_json['temperature'], date_time=sent_json['date_time'])
+    db.add_record(agent_name=agent_name, humidity=sent_json['humidity'], temperature=sent_json['temperature'], date_time=datetime.datetime.strptime(sent_json['date_time'],"%Y-%m-%d %H:%M:%S"))
     return jsonify({"exception_code": 201, "exception_message": "Added Data to Database", "success": True}), 201
 
-@api.route('/api/<agent_name>/delete_agent', methods=['POST'])
+@api.route('/api/<agent_name>/delete_agent', methods=['DELETE'])
 def delete_data(agent_name):
     db.remove_agent(agent_name)
     return jsonify({"exception_code": 201, "exception_message": "Agent deleted from server", "success": True}), 201

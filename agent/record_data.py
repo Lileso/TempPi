@@ -1,4 +1,5 @@
 from datetime import datetime
+import socket
 import time
 #import Adafruit_DHT as Sensor
 import threading
@@ -9,16 +10,9 @@ p = pathlib.Path('config/agent.yaml')
 with p.open(mode='r') as f:
     config = yaml.safe_load(f)
 agent_config = config['agent']
-server_config = config['agent']
+server_config = config['server_connection']
 
 sensor_args = {	'11': Sensor.DHT11, '22': Sensor.DHT22, '2302': Sensor.AM2302}
-
-'''def add_parser_options(parser):
-    parser.add_option('-t', action="store", type="int", default=15, help="time interval in minutes to request readout from sensor [default: %default]")
-    parser.add_option('--pin', dest="pin", action="store", type="int", default=4, help="data pin connected to sensor [default: %default]")
-    parser.add_option('-s', action="store", type="str", default='11', help="number of DHT sensor in use (supported: 11, 22, 2302) [default: %default]")
-    return parser
-'''
 
 class SensorDatabase(threading.Thread):
     def __init__(self, pin, sensor_number, minutes_interval):
@@ -29,11 +23,14 @@ class SensorDatabase(threading.Thread):
 
     def record_to_database(self, data):
         humidity, temperature, datetime = data
+        agent_name = agent_config['name']
+        if agent_name == "Hostname":
+            agent_name = socket.gethostname()
         json_data={}
         json_data['humidity']= humidity
         json_data['temperature']= temperature
-        json_data['datetime']=datetime
-        requests.post(url=f"http://{server_config['server_url']}:{server_config['server_port']}",json=json_data)
+        json_data['datetime']=datetime.strftime("%Y-%m-%d %H:%M:%S")
+        requests.post(url=f"http://{server_config['server_url']}/api/{agent_name}/send_data:{server_config['server_port']}",json=json_data)
 
     def run(self):
         while True:
@@ -45,5 +42,5 @@ class SensorDatabase(threading.Thread):
             time.sleep(sleep_time)
 
 if __name__ == "__main__":
-    sd = SensorDatabase(agent_config['pin'], agent_config["sensor"], agent_config['time'])
+    sd = SensorDatabase(agent_config['pin'], agent_config["sensor"], agent_config['time_in_minutes'])
     sd.run()

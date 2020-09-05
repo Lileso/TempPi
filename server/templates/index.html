@@ -14,11 +14,15 @@
                 <thead>
                     <tr>
                         <th>Agent Name</th>
+                        <th></th>
+                        <th>Delete?</th>
                     </tr>
                 </thead>
                 <tbody id="ServerList">
                     {%for x in table_list%}
                     <td><a href="/{{x}}">{{x}}</a></td>
+                    <td></td>
+                    <td><form action="/api/{{x}}/delete_agent" method="DELETE"><input type="submit" class="btnSubmit" value="delete" /></form></td>
                     {%endfor%}
                 </tbody>
             </table> 
